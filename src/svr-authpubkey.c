@@ -466,9 +466,11 @@ static int checkpubkey(const char* keyalgo, unsigned int keyalgolen,
 		 * its been done in checkpubkeyperms. */
 		len = strlen(ses.authstate.pw_dir);
 		/* allocate max required pathname storage,
-		 * = path + "/.ssh/authorized_keys" + '\0' = pathlen + 22 */
-		filename = m_malloc(len + 22);
-		snprintf(filename, len + 22, "%s/.ssh/authorized_keys",
+		 * = path + "/" + HOME_SSH_DIR + "/authorized_keys" + '\0' =
+		 * = pathlen + sizeof(HOME_SSH_DIR)+ 17 */
+		filename = m_malloc(len + sizeof(HOME_SSH_DIR) + 17);
+		snprintf(filename, len + sizeof(HOME_SSH_DIR) + 17,
+					"%s/" HOME_SSH_DIR "/authorized_keys",
 					ses.authstate.pw_dir);
 
 		authfile = fopen(filename, "r");
@@ -544,8 +546,9 @@ static int checkpubkeyperms() {
 	}
 
 	/* allocate max required pathname storage,
-	 * = path + "/.ssh/authorized_keys" + '\0' = pathlen + 22 */
-	len += 22;
+	 * = path + "/" + HOME_SSH_DIR + "/authorized_keys" + '\0' =
+	 * = pathlen + sizeof(HOME_SSH_DIR)+ 17 */
+	len += sizeof(HOME_SSH_DIR) + 17;
 	filename = m_malloc(len);
 	strlcpy(filename, ses.authstate.pw_dir, len);
 
@@ -555,7 +558,7 @@ static int checkpubkeyperms() {
 	}
 
 	/* check ~/.ssh */
-	strlcat(filename, "/.ssh", len);
+	strlcat(filename, "/" HOME_SSH_DIR, len);
 	if (checkfileperm(filename) != DROPBEAR_SUCCESS) {
 		goto out;
 	}

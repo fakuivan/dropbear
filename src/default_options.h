@@ -20,6 +20,9 @@ IMPORTANT: Some options will require "make clean" after changes */
 /* Listen on all interfaces */
 #define DROPBEAR_DEFADDRESS ""
 
+/* Directory for user-specific configs, like authorized_keys */
+#define HOME_SSH_DIR ".ssh"
+
 /* Default hostkey paths - these can be specified on the command line.
  * Homedir is prepended if path begins with ~/
  */
@@ -258,7 +261,7 @@ group1 in Dropbear server too */
 /* A default argument for dbclient -i <privatekey>.
  * Homedir is prepended if path begins with ~/
  */
-#define DROPBEAR_DEFAULT_CLI_AUTHKEY "~/.ssh/id_dropbear"
+#define DROPBEAR_DEFAULT_CLI_AUTHKEY "~/" HOME_SSH_DIR "/id_dropbear"
 
 /* Per client configuration file
 */
